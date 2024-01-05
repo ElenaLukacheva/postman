@@ -88,10 +88,11 @@
 					"script": {
 						"exec": [
 							"var page = [0,1,2,3,4,5];\r",
-							"var limit = [0,1,2,15,37,49,50];\r",
+							"var limit = Math.floor((Math.random()*50 +1))\r",
+							"\r",
 							"\r",
 							"pm.collectionVariables.set(\"pageCollection\", page[_.random(page.length -1)]);\r",
-							"pm.collectionVariables.set(\"limitCollection\", limit[_.random(limit.length -1)]);"
+							"pm.collectionVariables.set(\"limitCollection\", limit);"
 						],
 						"type": "text/javascript"
 					}
@@ -101,7 +102,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{HOST_DEMO_dummyapi}}/user?page=5&limit=10",
+					"raw": "{{HOST_DEMO_dummyapi}}/user?page={{pageCollection}}&limit={{limitCollection}}",
 					"host": [
 						"{{HOST_DEMO_dummyapi}}"
 					],
@@ -111,11 +112,11 @@
 					"query": [
 						{
 							"key": "page",
-							"value": "5"
+							"value": "{{pageCollection}}"
 						},
 						{
 							"key": "limit",
-							"value": "10"
+							"value": "{{limitCollection}}"
 						}
 					]
 				}
@@ -138,6 +139,16 @@
 						],
 						"type": "text/javascript"
 					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var email = 'tests' + Math.floor((Math.random()*150 +1)) + '@mln.com';\r",
+							"pm.collectionVariables.set(\"emailCollection\", email);"
+						],
+						"type": "text/javascript"
+					}
 				}
 			],
 			"request": {
@@ -145,7 +156,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\"firstName\": \"{{$randomFirstName}}\",\r\n\"lastName\": \"{{$randomLastName}}\",\r\n\"email\": \"{{$randomEmail}}\"\r\n}",
+					"raw": "{\r\n\"firstName\": \"{{$randomFirstName}}\",\r\n\"lastName\": \"{{$randomLastName}}\",\r\n\"email\": \"{{emailCollection}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -594,6 +605,10 @@
 		},
 		{
 			"key": "limitCollection",
+			"value": ""
+		},
+		{
+			"key": "emailCollection",
 			"value": ""
 		}
 	]
